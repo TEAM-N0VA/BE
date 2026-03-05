@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from diet.views import test_connection # diet 기능에서 추가
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('api/test/', test_connection),
 ]
