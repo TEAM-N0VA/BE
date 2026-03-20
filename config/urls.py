@@ -15,10 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from diet.views import test_connection # diet 기능에서 추가
+from django.urls import path, include
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path('api/test/', test_connection),
+    path('admin/', admin.site.urls),
+    path('auth/', include('accounts.urls')),   # 인증/프로필 관련
+    path('meals/', include('meals.urls')),  #식사 기록 관련
 ]
