@@ -28,6 +28,7 @@ INSTALLED_APPS = [
 
     # 우리 앱
     'accounts',
+    'meals',
 ]
 
 MIDDLEWARE = [
