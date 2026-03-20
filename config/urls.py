@@ -20,4 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('accounts.urls')),   # 인증/프로필 관련
+    path('meals/', include('meals.urls')),  #식사 기록 관련
 ]
