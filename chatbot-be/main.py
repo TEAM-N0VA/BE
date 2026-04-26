@@ -113,10 +113,14 @@ def chat(req: ChatRequest):
         if len(evidence) >= 3:
             break
 
-    # 5) Answer build (ko-only rules + anti-repeat tips)
+        # 5) Answer build (Gemini or rule-based fallback)
     use_gemini = os.getenv("USE_GEMINI", "false").lower() == "true"
 
+    print("USE_GEMINI:", use_gemini)
+    print("GEMINI_MODEL:", os.getenv("GEMINI_MODEL"))
+
     if use_gemini:
+        print("🚀 Using Gemini")
         try:
             answer = render_answer_with_gemini(
                 user_msg=user_msg,
@@ -125,23 +129,28 @@ def chat(req: ChatRequest):
                 evidence=evidence,
                 history=[m.model_dump() for m in history],
             )
-        except Exception:
+            #answer = "[GEMINI]\n" + answer
+        except Exception as e:
+            print("❌ Gemini ERROR:", repr(e))
             answer = build_answer_ko(
+                user_msg=user_msg,
+                intent=intent,
+                evidence=evidence,
+                history=[m.model_dump() for m in history],
+                parsed=parsed,
+            )
+            #answer = "[RULE-FALLBACK]\n" + answer
+    else:
+        print("🧠 Using Rule-based")
+        answer = build_answer_ko(
             user_msg=user_msg,
             intent=intent,
             evidence=evidence,
             history=[m.model_dump() for m in history],
             parsed=parsed,
         )
-    else:
-        answer = build_answer_ko(
-        user_msg=user_msg,
-        intent=intent,
-        evidence=evidence,
-        history=[m.model_dump() for m in history],
-        parsed=parsed,
-    )
-
+        #answer = "[RULE]\n" + answer
+        
     return {
         "answer": answer,
         "intent": intent,

@@ -147,7 +147,6 @@ _RESPONSE_SCHEMA = {
         "followup": {"type": "string"},
     },
     "required": ["summary", "actions", "caution", "advice", "followup"],
-    "additionalProperties": False,
 }
 
 
@@ -176,7 +175,7 @@ def render_answer_with_gemini(
             temperature=0.2,
             max_output_tokens=260,
             response_mime_type="application/json",
-            response_json_schema=_RESPONSE_SCHEMA,
+            response_schema=_RESPONSE_SCHEMA,
         ),
     )
 
