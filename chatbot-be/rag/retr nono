@@ -1,0 +1,42 @@
+from typing import List, Dict, Any
+import os
+from chromadb import PersistentClient
+from sentence_transformers import SentenceTransformer
+
+CHROMA_PATH = os.getenv("CHROMA_PATH", ".chroma")
+COLLECTION_NAME = os.getenv("COLLECTION_NAME", "faq_ko_gdm")
+
+EMBED_MODEL = os.getenv("EMBED_MODEL", "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+
+client = PersistentClient(path=CHROMA_PATH)
+collection = client.get_or_create_collection(name=COLLECTION_NAME)
+
+embedder = SentenceTransformer(EMBED_MODEL)
+
+def retrieve_evidence(query: str, k: int = 5) -> List[Dict[str, Any]]:
+    embedding = embedder.encode(query).tolist()
+
+    results = collection.query(
+        query_embeddings=[embedding],
+        n_results=k,
+        include=["documents", "metadatas", "distances"],
+    )
+
+    docs = results.get("documents", [[]])[0]
+    metas = results.get("metadatas", [[]])[0]
+    dists = results.get("distances", [[]])[0]
+
+    evidence: List[Dict[str, Any]] = []
+    for doc, meta, dist in zip(docs, metas, dists):
+        # dist는 보통 "작을수록 유사"
+        # score는 직관적으로 "클수록 유사"로 변환 (단순 변환)
+        score = float(1.0 / (1.0 + dist)) if dist is not None else None
+
+        evidence.append({
+            "source": (meta or {}).get("source", "FAQ"),
+            "snippet": (doc or "")[:900],
+            "score": score,
+            "meta": meta or {},
+        })
+
+    return evidence
