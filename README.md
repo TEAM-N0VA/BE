@@ -85,7 +85,7 @@ PostgreSQL 공식 설치 파일을 통해 설치합니다.
 - Gemini API 또는 기타 LLM API
 - FastAPI AI 서버 주소
 
-민감한 값은 README에 직접 작성하지 않습니다. 프로젝트에 포함된 `.env.example`, `.env.sample`, `settings.py`, 또는 팀 내부 환경변수 문서를 확인해 `.env` 파일을 작성하세요.
+ 프로젝트에 포함된 `.env.example` 문서를 확인해 `.env` 파일을 작성하세요.
 
 ---
 
