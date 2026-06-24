@@ -1,0 +1,14 @@
+[
+  {
+    "id": "kda_2025",
+    "title": "KDA Clinical Practice Guidelines 2025",
+    "url": "https://www.diabetes.or.kr/bbs/?code=guide",
+    "pdf_filename": "KDA_2025.pdf"
+  },
+  {
+    "id": "nice_ng3",
+    "title": "NICE NG3: Diabetes in pregnancy",
+    "url": "https://www.nice.org.uk/guidance/ng3",
+    "pdf_filename": "NICE_NG3.pdf"
+  }
+]
